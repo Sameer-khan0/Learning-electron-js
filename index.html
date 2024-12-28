@@ -1,11 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Practice App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae ea nostrum explicabo corporis nemo vero sed incidunt laudantium odit fugiat!
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="container mx-auto p-6 max-w-xl bg-white shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Typing Practice App</h1>
+
+    <div id="text-display" class="text-lg bg-gray-100 p-4 rounded mb-4 text-gray-700 font-mono">
+      <!-- Random text will appear here -->
+    </div>
+
+    <textarea id="user-input" 
+      rows="5" 
+      class="w-full p-4 text-lg border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300" 
+      placeholder="Start typing here..."></textarea>
+
+    <div class="flex items-center justify-between mt-4">
+      <button onclick="startGame()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Start
+      </button>
+      <span id="result" class="text-gray-700"></span>
+    </div>
+  </div>
+
+  <script>
+    const sampleTexts = [
+      "The quick brown fox jumps over the lazy dog.",
+      "Typing is a skill that improves with practice.",
+      "JavaScript is a versatile and powerful programming language.",
+      "Practice makes perfect, especially when it comes to typing speed.",
+      "Stay consistent and focused to achieve your goals."
+    ];
+
+    let currentText = "";
+    let startTime = null;
+
+    // Function to start the game
+    function startGame() {
+      const randomIndex = Math.floor(Math.random() * sampleTexts.length);
+      currentText = sampleTexts[randomIndex];
+      document.getElementById("text-display").innerText = currentText;
+      document.getElementById("user-input").value = "";
+      document.getElementById("result").innerText = "";
+      startTime = new Date(); // Record the start time
+    }
+
+    // Check input as user types
+    document.getElementById("user-input").addEventListener("input", () => {
+      const inputText = document.getElementById("user-input").value;
+      const resultEl = document.getElementById("result");
+
+      // Check if user finished typing the text
+      if (inputText === currentText) {
+        const endTime = new Date(); // Record the end time
+        const timeTaken = (endTime - startTime) / 1000; // Time in seconds
+        const wordsPerMinute = (currentText.split(" ").length / timeTaken) * 60;
+        resultEl.innerHTML = `
+          <span class="text-green-600 font-bold">Well done!</span> 
+          You typed at <span class="font-bold">${wordsPerMinute.toFixed(2)} WPM</span>.
+        `;
+      } else if (currentText.startsWith(inputText)) {
+        resultEl.innerHTML = `<span class="text-blue-600">Keep going...</span>`;
+      } else {
+        resultEl.innerHTML = `<span class="text-red-600">Oops, there's a mistake!</span>`;
+      }
+    });
+  </script>
 </body>
 </html>

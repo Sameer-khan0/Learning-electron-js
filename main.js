@@ -25,8 +25,15 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     // alert("App is closed")
+    console.log("app is closed")
     mainWindow = null;
   });
+  mainWindow.on("focus", ()=>{
+    console.warn("app is focus")
+  })
+  mainWindow.on("blur",()=>{
+    console.warn("app is not in focus")
+  })
 }
 
 app.whenReady().then(() => {
